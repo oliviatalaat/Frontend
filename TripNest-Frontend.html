@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest – Discover Egypt</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --teal:#0D9488;--teal-d:#0A7567;--teal-l:#CCFBF1;--teal-xl:#F0FDFA;
+  --amber:#F59E0B;--amber-l:#FEF3C7;
+  --ink:#0F2027;--ink2:#1E3A47;
+  --muted:#64748B;--border:#E2E8F0;--bg:#F8FAFC;--white:#FFFFFF;
+  --r:14px;
+}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button,input,select{font-family:inherit;cursor:pointer}
+
+.pg{display:none}
+.pg.on{display:block}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.65rem 1.5rem;border-radius:100px;font-size:.9rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-teal{background:var(--teal);color:#fff}.btn-teal:hover{background:var(--teal-d);transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,148,136,.3)}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border)}.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+.btn-white{background:#fff;color:var(--teal);border:2px solid rgba(255,255,255,.3)}.btn-white:hover{background:rgba(255,255,255,.9)}
+.btn-lg{padding:.88rem 2rem;font-size:1rem}
+.btn-sm{padding:.42rem 1rem;font-size:.8rem}
+
+/* ── Fields ── */
+.field{display:flex;flex-direction:column;gap:.35rem}
+.field label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:var(--muted)}
+.field input,.field select{border:2px solid var(--border);border-radius:12px;padding:.7rem 1rem;font-size:.9rem;color:var(--ink);background:#fff;outline:none;transition:.2s;width:100%}
+.field input:focus,.field select:focus{border-color:var(--teal);box-shadow:0 0 0 4px rgba(13,148,136,.1)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+
+/* ── Pill ── */
+.pill{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .75rem;border-radius:100px;font-size:.7rem;font-weight:700}
+.pill-green{background:#D1FAE5;color:#065F46}
+.pill-amber{background:var(--amber-l);color:#92400E}
+
+/* ══════════════════════════════════════
+   LANDING
+══════════════════════════════════════ */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(255,255,255,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
+.logo{font-size:1.5rem;font-weight:800;color:var(--ink);letter-spacing:-.5px}
+.logo span{color:var(--teal)}
+.nav-r{display:flex;gap:.6rem}
+
+.hero{background:linear-gradient(135deg,var(--ink) 0%,var(--ink2) 45%,#0D4A5A 100%);padding:5rem 2.5rem 0;position:relative;overflow:hidden;min-height:560px}
+.hero::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(13,148,136,.25),transparent 70%);top:-100px;right:-100px;pointer-events:none}
+.hero::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.15),transparent 70%);bottom:0;left:100px;pointer-events:none}
+.hero-in{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:1fr 430px;gap:3.5rem;align-items:flex-end}
+.hero-text{padding-bottom:4rem;position:relative;z-index:1}
+.hero-kicker{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:.3rem .9rem;font-size:.75rem;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:1.5rem}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2.8rem,5vw,4rem);color:#fff;line-height:1.1;margin-bottom:1.1rem;letter-spacing:-.02em}
+.hero h1 i{color:var(--amber);font-style:italic}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,.6);line-height:1.75;font-weight:300;margin-bottom:2rem;max-width:440px}
+.hero-btns{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.hero-trust{display:flex;gap:2rem}
+.trust-item strong{display:block;font-size:1.1rem;font-weight:800;color:#fff}
+.trust-item span{font-size:.75rem;color:rgba(255,255,255,.45)}
+.search-float{background:#fff;border-radius:20px 20px 0 0;padding:1.8rem;position:relative;z-index:2;box-shadow:0 -4px 40px rgba(0,0,0,.15);align-self:flex-end}
+.search-float h3{font-size:1rem;font-weight:700;margin-bottom:1.2rem;color:var(--ink)}
+.search-float .g2{margin-bottom:.85rem}
+.search-go{width:100%;padding:.9rem;border-radius:12px;font-size:.95rem;font-weight:700;background:var(--teal);color:#fff;border:none;cursor:pointer;transition:.2s;margin-top:.4rem;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.search-go:hover{background:var(--teal-d);box-shadow:0 6px 20px rgba(13,148,136,.3)}
+
+/* destination selector on landing */
+#dest-select-landing{font-size:.9rem;width:100%}
+
+/* tours strip */
+.sec{max-width:1140px;margin:0 auto;padding:3.5rem 2.5rem}
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.8rem}
+.sec-h h2{font-family:'DM Serif Display',serif;font-size:1.9rem}
+.sec-h p{font-size:.83rem;color:var(--muted);margin-top:.3rem}
+.sec-h a{font-size:.85rem;color:var(--teal);font-weight:600;cursor:pointer}
+.tc{background:#fff;border-radius:18px;border:1.5px solid var(--border);overflow:hidden;cursor:pointer;transition:all .25s}
+.tc:hover{transform:translateY(-5px);box-shadow:0 16px 44px rgba(13,148,136,.15);border-color:var(--teal-l)}
+.tc-thumb{height:145px;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative}
+.tc-badge{position:absolute;top:.7rem;left:.7rem;background:rgba(255,255,255,.95);border-radius:100px;padding:.2rem .65rem;font-size:.65rem;font-weight:700;color:var(--teal-d)}
+.tc-body{padding:1rem 1.1rem 1.1rem}
+.tc-name{font-size:.92rem;font-weight:700;margin-bottom:.25rem}
+.tc-loc{font-size:.73rem;color:var(--muted);margin-bottom:.8rem}
+.tc-foot{display:flex;align-items:center;justify-content:space-between}
+.tc-price{font-size:1.05rem;font-weight:800;color:var(--teal)}
+.tc-price small{font-size:.68rem;color:var(--muted);font-weight:400}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+
+.feats{background:var(--ink);padding:4.5rem 2.5rem}
+.feats-in{max-width:1140px;margin:0 auto}
+.feats-in h2{font-family:'DM Serif Display',serif;font-size:2rem;color:#fff;margin-bottom:.4rem}
+.feats-in>p{color:rgba(255,255,255,.4);font-size:.88rem;margin-bottom:2.5rem}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.9rem}
+.feat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1.3rem;transition:.2s}
+.feat:hover{background:rgba(13,148,136,.12);border-color:rgba(13,148,136,.3)}
+.feat-ico{font-size:1.5rem;margin-bottom:.7rem}
+.feat-t{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+.feat-d{font-size:.76rem;color:rgba(255,255,255,.38);line-height:1.65}
+footer{background:var(--ink);border-top:1px solid rgba(255,255,255,.07);padding:1.5rem 2.5rem;text-align:center;font-size:.78rem;color:rgba(255,255,255,.3)}
+footer em{color:var(--teal);font-style:normal}
+
+/* ══════════════════════════════════════
+   ✈️ FLYOVER / DESTINATION EXPERIENCE
+══════════════════════════════════════ */
+
+/* Full-screen loading/takeoff screen */
+#flyover-pg{
+  position:fixed;inset:0;z-index:9000;
+  display:none;overflow:hidden;
+  background:#000;
+}
+#flyover-pg.on{display:block}
+
+/* Sky canvas */
+.sky{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,#0a1628 0%,#0d2137 30%,#1a3a52 60%,#2d6a8f 80%,#e8c97a 95%,#f4a261 100%);
+  transition:background 2s ease;
+}
+.sky.day{
+  background:linear-gradient(180deg,#1e90c8 0%,#3aabde 40%,#87ceeb 70%,#b8e4f9 90%,#fff 100%);
+}
+
+/* Stars */
+.stars-wrap{position:absolute;inset:0;pointer-events:none}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle 2s infinite alternate}
+@keyframes twinkle{from{opacity:.2;transform:scale(1)}to{opacity:1;transform:scale(1.4)}}
+
+/* Clouds */
+.clouds-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.cloud{
+  position:absolute;
+  background:rgba(255,255,255,.85);
+  border-radius:50px;
+  filter:blur(8px);
+  animation:cloudMove linear infinite;
+}
+@keyframes cloudMove{from{transform:translateX(110vw)}to{transform:translateX(-300px)}}
+
+/* Ground (horizon) */
+.ground{
+  position:absolute;bottom:0;left:0;right:0;
+  height:40%;
+  background:linear-gradient(180deg,transparent,rgba(30,90,60,.6) 40%,#1a5c38 100%);
+  transform:perspective(600px) rotateX(20deg);
+  transform-origin:bottom center;
+  transition:height 1.5s ease;
+}
+
+/* Plane */
+.plane-wrap{
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  z-index:10;
+  animation:planeFly 4s ease-in-out infinite;
+}
+@keyframes planeFly{
+  0%,100%{transform:translate(-50%,-52%) rotate(-2deg)}
+  50%{transform:translate(-50%,-48%) rotate(2deg)}
+}
+.plane-svg{
+  font-size:5rem;
+  display:block;
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,.4));
+  animation:planeTilt 4s ease-in-out infinite;
+}
+@keyframes planeTilt{
+  0%,100%{transform:rotate(0deg)}50%{transform:rotate(-3deg)}
+}
+
+/* Loading bar */
+.fly-loadbar{
+  position:absolute;bottom:0;left:0;
+  height:4px;background:var(--teal);
+  width:0%;transition:width 3.5s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 12px var(--teal);
+}
+
+/* Takeoff counter text */
+.fly-status{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,80px);
+  text-align:center;z-index:11;
+}
+.fly-status p{color:rgba(255,255,255,.7);font-size:.85rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;margin-bottom:.5rem}
+.fly-dest-name{font-family:'DM Serif Display',serif;color:#fff;font-size:1.6rem;opacity:0;transform:translateY(10px);transition:all .6s .5s ease}
+.fly-dest-name.show{opacity:1;transform:translateY(0)}
+.fly-pct{font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.4rem;letter-spacing:2px}
+
+/* Speed lines */
+.speed-lines{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:0;transition:opacity .5s}
+.speed-lines.on{opacity:1}
+.sp-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:speedLine .4s linear infinite}
+@keyframes speedLine{from{transform:translateX(-100%)}to{transform:translateX(200%)}  }
+
+/* ══════════════════════════════════════
+   DESTINATION OVERVIEW PAGE
+══════════════════════════════════════ */
+#dest-pg{
+  position:fixed;inset:0;z-index:8000;
+  display:none;overflow-y:auto;
+  background:#0F1923;
+}
+#dest-pg.on{display:block}
+
+.dest-hero{
+  position:relative;height:70vh;min-height:480px;
+  display:flex;align-items:flex-end;
+  overflow:hidden;
+}
+.dest-hero-bg{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:min(35vw,320px);
+  animation:slowZoom 20s ease-in-out infinite alternate;
+  user-select:none;
+}
+@keyframes slowZoom{from{transform:scale(1)}to{transform:scale(1.12)}}
+
+.dest-hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(15,25,35,.2) 0%,rgba(15,25,35,.4) 50%,rgba(15,25,35,.95) 100%);
+}
+.dest-hero-content{
+  position:relative;z-index:2;padding:2.5rem 3rem;width:100%;
+  animation:slideUp .8s .2s both ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.dest-country{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--amber);margin-bottom:.5rem}
+.dest-title{font-family:'DM Serif Display',serif;font-size:clamp(2.5rem,6vw,4.5rem);color:#fff;line-height:1.05;margin-bottom:.75rem}
+.dest-tagline{font-size:1rem;color:rgba(255,255,255,.6);max-width:500px;line-height:1.7;font-weight:300;margin-bottom:1.5rem}
+.dest-quick-facts{display:flex;gap:1.5rem;flex-wrap:wrap}
+.dest-fact{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:.35rem .9rem;font-size:.78rem;color:rgba(255,255,255,.8);font-weight:500;backdrop-filter:blur(4px)}
+
+/* Back button */
+.dest-back{
+  position:fixed;top:1.2rem;left:1.2rem;z-index:9999;
+  background:rgba(15,25,35,.7);border:1px solid rgba(255,255,255,.15);
+  color:#fff;border-radius:100px;padding:.5rem 1.1rem;font-size:.82rem;font-weight:600;
+  cursor:pointer;backdrop-filter:blur(8px);transition:.2s;display:flex;align-items:center;gap:.4rem;
+}
+.dest-back:hover{background:rgba(13,148,136,.5);border-color:var(--teal)}
+
+/* Highlights section */
+.dest-body{max-width:1100px;margin:0 auto;padding:3rem 2.5rem 5rem}
+.dest-section-title{
+  font-family:'DM Serif Display',serif;font-size:1.6rem;color:#fff;
+  margin-bottom:.4rem;display:flex;align-items:center;gap:.6rem
+}
+.dest-section-sub{font-size:.85rem;color:rgba(255,255,255,.4);margin-bottom:1.6rem;font-weight:300}
+
+/* Place cards */
+.places-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.1rem;margin-bottom:3rem}
+.place-card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;padding:1.4rem;
+  transition:all .25s;cursor:default;
+  animation:cardIn .5s ease both;
+}
+.place-card:hover{background:rgba(13,148,136,.12);border-color:rgba(13,148,136,.35);transform:translateY(-3px)}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.pc-ico{font-size:2.2rem;margin-bottom:.75rem}
+.pc-name{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.3rem}
+.pc-desc{font-size:.8rem;color:rgba(255,255,255,.45);line-height:1.65}
+.pc-meta{margin-top:.85rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.pc-tag{font-size:.67rem;font-weight:700;padding:.18rem .6rem;border-radius:100px;background:rgba(13,148,136,.2);color:var(--teal-l);border:1px solid rgba(13,148,136,.25)}
+
+/* Info strip */
+.info-strip{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;
+  margin-bottom:3rem;
+}
+.info-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.2rem;text-align:center}
+.info-card .ic-ico{font-size:1.8rem;margin-bottom:.5rem}
+.info-card .ic-val{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:.2rem}
+.info-card .ic-lbl{font-size:.72rem;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:1px}
+
+/* CTA to book */
+.dest-cta{
+  background:linear-gradient(135deg,var(--teal-d),#0a5c6e);
+  border-radius:20px;padding:2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;
+}
+.dest-cta h3{font-family:'DM Serif Display',serif;font-size:1.5rem;color:#fff;margin-bottom:.3rem}
+.dest-cta p{font-size:.88rem;color:rgba(255,255,255,.6);font-weight:300}
+.dest-cta-btns{display:flex;gap:.75rem;flex-wrap:wrap}
+
+/* timeline */
+.timeline{display:flex;flex-direction:column;gap:0;margin-bottom:3rem}
+.tl-item{display:flex;gap:1.2rem;padding-bottom:1.4rem;position:relative}
+.tl-item:last-child{padding-bottom:0}
+.tl-item:last-child .tl-line{display:none}
+.tl-dot{width:36px;height:36px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;box-shadow:0 0 0 4px rgba(13,148,136,.2)}
+.tl-line{position:absolute;left:17px;top:36px;width:2px;bottom:0;background:rgba(13,148,136,.2)}
+.tl-content{flex:1;padding-top:.3rem}
+.tl-time{font-size:.7rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:.2rem}
+.tl-txt{font-size:.88rem;color:rgba(255,255,255,.75);line-height:1.6}
+
+/* weather / season */
+.season-bar{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:3rem}
+.season-chip{padding:.45rem 1.1rem;border-radius:100px;font-size:.78rem;font-weight:600;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);background:rgba(255,255,255,.04);transition:.2s}
+.season-chip.best{background:rgba(13,148,136,.2);border-color:var(--teal);color:var(--teal-l)}
+
+/* ══════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════ */
+#dash-pg{min-height:100vh;display:none}
+#dash-pg.on{display:grid!important;grid-template-columns:220px 1fr}
+.sb{background:#fff;border-right:1.5px solid var(--border);padding:1.5rem;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;width:220px}
+.sb .logo{margin-bottom:2rem}
+.sb-nav{display:flex;flex-direction:column;gap:.2rem;flex:1}
+.nb{display:flex;align-items:center;gap:.75rem;padding:.7rem .95rem;border-radius:12px;font-size:.87rem;font-weight:500;color:var(--muted);cursor:pointer;border:none;background:none;text-align:left;width:100%;transition:.18s}
+.nb:hover{background:var(--teal-xl);color:var(--teal)}
+.nb.on{background:var(--teal-l);color:var(--teal-d);font-weight:700}
+.nb-ico{width:20px;text-align:center;font-size:1rem}
+.sb-foot{display:flex;align-items:center;gap:.7rem;background:var(--teal-xl);border-radius:12px;padding:.8rem;margin-top:auto}
+.av{width:34px;height:34px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.88rem;flex-shrink:0}
+.sb-un{font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-rl{font-size:.68rem;color:var(--teal-d)}
+.sb-lo{margin-left:auto;font-size:1.1rem;opacity:.4;cursor:pointer;border:none;background:none;transition:.2s}
+.sb-lo:hover{opacity:1;color:#EF4444}
+.dmain{margin-left:220px;padding:2.2rem 2.5rem;min-height:100vh;background:var(--bg)}
+.dtop{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem}
+.dtop h1{font-family:'DM Serif Display',serif;font-size:1.55rem;letter-spacing:-.02em}
+.dtop p{font-size:.83rem;color:var(--muted);margin-top:.25rem}
+.panel{display:none}
+.panel.on{display:block;animation:riseUp .28s ease}
+@keyframes riseUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-bottom:2rem}
+.sc{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:1.2rem 1.4rem}
+.sc-ico{font-size:1.4rem;margin-bottom:.5rem}
+.sc-n{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--ink)}
+.sc-l{font-size:.7rem;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted);margin-top:.1rem}
+.w{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:1.4rem}
+.wh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.wh p{font-size:.92rem;font-weight:700;color:var(--ink)}
+.wh a{font-size:.78rem;color:var(--teal);font-weight:600;cursor:pointer}
+.tr{display:flex;align-items:center;gap:.95rem;padding:.85rem 0;border-bottom:1px solid var(--border)}
+.tr:last-child{border-bottom:none}
+.tr-ico{width:40px;height:40px;border-radius:12px;background:var(--teal-xl);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+.tr-info{flex:1}
+.tr-name{font-size:.87rem;font-weight:600;color:var(--ink)}
+.tr-sub{font-size:.72rem;color:var(--muted);margin-top:.12rem}
+.tr-r{text-align:right;flex-shrink:0}
+.tr-price{font-size:.9rem;font-weight:800;color:var(--teal)}
+.rr{display:flex;align-items:center;gap:.85rem;padding:.72rem .9rem;background:var(--bg);border-radius:12px;margin-bottom:.55rem;cursor:pointer;transition:.18s}
+.rr:last-child{margin-bottom:0}
+.rr:hover{background:var(--teal-xl);transform:translateX(3px)}
+.rr-ico{font-size:1.3rem}
+.rr-info{flex:1}
+.rr-name{font-size:.85rem;font-weight:600;color:var(--ink)}
+.rr-sub{font-size:.7rem;color:var(--muted)}
+.rr-price{font-size:.88rem;font-weight:800;color:var(--teal);flex-shrink:0}
+.offer-box{background:linear-gradient(135deg,var(--ink) 0%,var(--ink2) 100%);border-radius:var(--r);padding:1.3rem;position:relative;overflow:hidden;margin-bottom:.85rem}
+.offer-box::after{content:'🏷️';position:absolute;right:.5rem;bottom:-1.2rem;font-size:4rem;opacity:.1}
+.offer-tag{font-size:.65rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--amber);margin-bottom:.3rem}
+.offer-t{font-size:1rem;font-weight:800;color:#fff;margin-bottom:.25rem}
+.offer-s{font-size:.75rem;color:rgba(255,255,255,.4);margin-bottom:.8rem;font-weight:300}
+.offer-code{display:inline-block;background:rgba(255,255,255,.12);border:1px dashed rgba(255,255,255,.3);color:#fff;padding:.28rem .9rem;border-radius:8px;font-size:.82rem;font-weight:800;letter-spacing:3px}
+.ai-form{display:flex;flex-direction:column;gap:.8rem}
+.gen-btn{width:100%;padding:.82rem;border-radius:12px;background:var(--teal);color:#fff;font-size:.9rem;font-weight:700;border:none;cursor:pointer;transition:.2s;margin-top:.15rem}
+.gen-btn:hover{background:var(--teal-d);box-shadow:0 6px 20px rgba(13,148,136,.3)}
+.ai-out{display:none;margin-top:.9rem;background:var(--teal-xl);border-radius:14px;padding:1.1rem;border-left:4px solid var(--teal)}
+.ai-out-t{font-size:.85rem;font-weight:700;color:var(--teal-d);margin-bottom:.4rem}
+.ai-out p{font-size:.8rem;color:var(--muted);line-height:1.65}
+.bbar{margin-bottom:.8rem}
+.bbar-h{display:flex;justify-content:space-between;font-size:.77rem;margin-bottom:.3rem;color:var(--muted)}
+.bbar-h strong{color:var(--ink);font-weight:700}
+.track{height:8px;background:var(--border);border-radius:100px;overflow:hidden}
+.fill{height:100%;border-radius:100px;transition:width .9s ease}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.chip{padding:.4rem 1rem;border-radius:100px;font-size:.8rem;font-weight:600;border:1.5px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:.18s}
+.chip:hover,.chip.on{background:var(--teal-xl);border-color:var(--teal);color:var(--teal)}
+.exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.1rem}
+.star-row{display:flex;gap:.4rem;margin:.5rem 0}
+.s-btn{font-size:2rem;opacity:.2;transition:.15s;background:none;border:none;padding:0;line-height:1;cursor:pointer}
+.s-btn.on{opacity:1}
+.settings-s{margin-bottom:1.9rem}
+.settings-s h3{font-size:.87rem;font-weight:700;padding-bottom:.6rem;border-bottom:1.5px solid var(--border);margin-bottom:1rem;color:var(--ink)}
+.tog-row{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;padding:.55rem 0;border-bottom:1px solid var(--border);color:var(--muted)}
+.tog-row:last-child{border-bottom:none}
+.tog-row input[type=checkbox]{accent-color:var(--teal);width:16px;height:16px;cursor:pointer}
+
+/* ══════════════════════════════════════
+   AUTH
+══════════════════════════════════════ */
+#auth-pg{min-height:100vh;grid-template-columns:1fr 1fr;display:none}
+#auth-pg.on{display:grid!important}
+.auth-l{background:linear-gradient(160deg,var(--ink) 0%,var(--ink2) 50%,#0B5563 100%);padding:3.5rem;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.auth-l::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(13,148,136,.2),transparent 65%);top:-200px;right:-200px;pointer-events:none}
+.auth-l .logo{color:#fff;position:relative;margin-bottom:2.5rem}
+.auth-l .logo span{color:var(--amber)}
+.auth-l h2{font-family:'DM Serif Display',serif;font-size:2.2rem;color:#fff;line-height:1.2;margin-bottom:.8rem;position:relative}
+.auth-l h2 i{color:var(--amber)}
+.auth-l p{color:rgba(255,255,255,.45);font-size:.88rem;line-height:1.75;font-weight:300;position:relative;max-width:340px}
+.auth-perks{margin-top:2rem;display:flex;flex-direction:column;gap:.75rem;position:relative}
+.perk{display:flex;gap:.85rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1rem 1.1rem;align-items:flex-start}
+.perk-i{font-size:1.2rem;flex-shrink:0;margin-top:.1rem}
+.perk strong{display:block;color:rgba(255,255,255,.9);font-size:.84rem;font-weight:600}
+.perk span{font-size:.74rem;color:rgba(255,255,255,.38);font-weight:300}
+.auth-r{background:var(--bg);padding:3.5rem;display:flex;flex-direction:column;justify-content:center}
+.auth-back{font-size:.82rem;color:var(--muted);cursor:pointer;margin-bottom:2.2rem;display:inline-flex;align-items:center;gap:.4rem;transition:.2s;border:none;background:none}
+.auth-back:hover{color:var(--teal)}
+.auth-box{background:#fff;border-radius:24px;border:1.5px solid var(--border);padding:2.3rem;max-width:410px;box-shadow:0 8px 40px rgba(0,0,0,.08)}
+.auth-tabs{display:flex;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:1.7rem}
+.auth-tab{flex:1;padding:.55rem;text-align:center;border-radius:9px;font-size:.85rem;font-weight:600;color:var(--muted);transition:.2s;border:none;background:none}
+.auth-tab.on{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.09)}
+.aform{display:flex;flex-direction:column;gap:.85rem}
+.aform h3{font-family:'DM Serif Display',serif;font-size:1.4rem;letter-spacing:-.02em}
+.aform .sub{font-size:.82rem;color:var(--muted);font-weight:300}
+.asubmit{width:100%;padding:.88rem;border-radius:14px;background:var(--teal);color:#fff;font-size:.95rem;font-weight:700;border:none;cursor:pointer;transition:.2s;margin-top:.2rem}
+.asubmit:hover{background:var(--teal-d);box-shadow:0 6px 20px rgba(13,148,136,.3)}
+.or-div{display:flex;align-items:center;gap:.75rem;font-size:.75rem;color:var(--muted)}
+.or-div::before,.or-div::after{content:'';flex:1;height:1px;background:var(--border)}
+.sw{text-align:center;font-size:.82rem;color:var(--muted)}
+.sw a{color:var(--teal);font-weight:600;cursor:pointer}
+
+/* Toast */
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:99999;background:var(--ink);color:#fff;padding:.72rem 1.4rem;border-radius:100px;font-size:.85rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.2);transform:translateY(80px);opacity:0;transition:.3s;display:flex;align-items:center;gap:.5rem}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+
+<style id="responsive-fix">
+@media (max-width: 1024px){
+  .hero-in,
+  .stats,
+  .g3,
+  .places-grid,
+  .info-strip{
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  #dash-pg.on{
+    grid-template-columns:1fr !important;
+  }
+
+  .sb{
+    position:relative !important;
+    width:100% !important;
+    height:auto !important;
+    border-right:none !important;
+    border-bottom:1px solid #E2E8F0 !important;
+  }
+
+  .dmain{
+    margin-left:0 !important;
+  }
+}
+
+@media (max-width: 768px){
+
+  body{
+    overflow-x:hidden !important;
+  }
+
+  .nav,
+  .sec,
+  .hero,
+  .dest-body,
+  .dmain,
+  .auth-l,
+  .auth-r{
+    padding-left:1rem !important;
+    padding-right:1rem !important;
+  }
+
+  .hero-in,
+  .stats,
+  .g3,
+  .feat-grid,
+  .places-grid,
+  .info-strip,
+  .g2{
+    grid-template-columns:1fr !important;
+  }
+
+  .hero{
+    min-height:auto !important;
+    padding-top:2rem !important;
+  }
+
+  .hero-text{
+    padding-bottom:2rem !important;
+  }
+
+  .hero h1{
+    font-size:2.2rem !important;
+  }
+
+  .dest-title{
+    font-size:2.3rem !important;
+  }
+
+  .search-float{
+    border-radius:20px !important;
+  }
+
+  .stats{
+    gap:.8rem !important;
+  }
+
+  .sc-n{
+    font-size:1.5rem !important;
+  }
+
+  .dest-cta{
+    flex-direction:column !important;
+    align-items:flex-start !important;
+  }
+
+  .hero-btns,
+  .hero-trust,
+  .dest-quick-facts,
+  .dest-cta-btns{
+    flex-direction:column !important;
+    align-items:flex-start !important;
+  }
+
+  .btn,
+  .search-go,
+  .asubmit,
+  .gen-btn{
+    width:100% !important;
+  }
+
+  #auth-pg{
+    grid-template-columns:1fr !important;
+  }
+
+  .auth-l{
+    display:none !important;
+  }
+
+  .auth-box{
+    max-width:100% !important;
+  }
+
+  .sb-nav{
+    flex-direction:row !important;
+    overflow:auto !important;
+  }
+
+  .nb{
+    min-width:140px !important;
+  }
+
+  .dtop{
+    flex-direction:column !important;
+    gap:1rem !important;
+  }
+
+  .tr,
+  .rr{
+    flex-direction:column !important;
+    align-items:flex-start !important;
+  }
+}
+</style>
+
+
+<style id="professional-polish">
+html{
+    scroll-behavior:smooth;
+}
+
+button{
+    transition:all .25s ease !important;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+input, select, textarea{
+    font-size:16px !important;
+}
+
+@media(max-width:768px){
+    .hero h1{
+        line-height:1.2 !important;
+    }
+
+    .search-float,
+    .auth-box,
+    .w,
+    .sc,
+    .place-card,
+    .tc{
+        border-radius:18px !important;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     LANDING
+══════════════════════════════ -->
+<div id="landing" class="pg on">
+  <nav class="nav">
+    <div class="logo">Trip<span>Nest</span></div>
+    <div class="nav-r">
+      <button class="btn btn-ghost btn-sm" onclick="goAuth('login')">Sign In</button>
+      <button class="btn btn-teal btn-sm" onclick="goAuth('register')">Get Started</button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-in">
+      <div class="hero-text">
+        <div class="hero-kicker">✈️ Egypt's #1 Domestic Tourism Platform</div>
+        <h1>Travel smarter<br>across <i>Egypt</i></h1>
+        <p class="hero-sub">Pick a destination and we'll fly you there — see every landmark, plan your day, and book in seconds.</p>
+        <div class="hero-btns">
+          <button class="btn btn-teal btn-lg" onclick="goAuth('register')">Start Planning Free →</button>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-item"><strong>2,000+</strong><span>Happy travellers</span></div>
+          <div class="trust-item"><strong>★ 4.9</strong><span>Avg rating</span></div>
+          <div class="trust-item"><strong>6</strong><span>Destinations</span></div>
+        </div>
+      </div>
+
+      <!-- Destination picker with flyover trigger -->
+      <div class="search-float">
+        <h3>✈️ Choose Your Destination</h3>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.2rem;font-weight:300">Pick a place and we'll take you on a virtual tour before you book.</p>
+
+        <div class="field" style="margin-bottom:1rem">
+          <label>Where do you want to go?</label>
+          <select id="dest-select-landing" style="font-size:1rem;padding:.85rem 1rem;border-radius:14px;border-width:2px">
+            <option value="">— Choose a destination —</option>
+            <option value="pyramids">🔺 Pyramids of Giza</option>
+            <option value="cairo">🏛️ Cairo City</option>
+            <option value="alexandria">🏖️ Alexandria</option>
+            <option value="white-desert">🏜️ White Desert</option>
+            <option value="nile">🚢 Nile Cruise</option>
+            <option value="faiyum">🐋 Faiyum</option>
+          </select>
+        </div>
+
+        <div class="g2" style="margin-bottom:.85rem">
+          <div class="field"><label>People</label><input type="number" value="2" min="1"></div>
+          <div class="field"><label>Budget / person</label>
+            <select><option selected>EGP 500–1,000</option><option>EGP 1,000–2,500</option><option>EGP 2,500+</option></select>
+          </div>
+        </div>
+
+        <button class="search-go" onclick="startFlyover()">
+          ✈️ Fly Me There!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick destination cards -->
+  <div class="sec">
+    <div class="sec-h">
+      <div><h2>Popular Destinations</h2><p>Click any card to take a virtual tour</p></div>
+    </div>
+    <div class="g3">
+      <div class="tc" onclick="launchDest('pyramids')">
+        <div class="tc-thumb" style="background:#FEF3C7">🔺<div class="tc-badge">✈️ Virtual Tour</div></div>
+        <div class="tc-body"><div class="tc-name">Pyramids of Giza</div><div class="tc-loc">📍 Giza · 8hrs · EGP 850/person</div><div class="tc-foot"><div class="tc-price">Explore →</div><span style="font-size:.72rem;color:var(--muted)">★ 5.0</span></div></div>
+      </div>
+      <div class="tc" onclick="launchDest('cairo')">
+        <div class="tc-thumb" style="background:#CCFBF1">🏛️<div class="tc-badge">✈️ Virtual Tour</div></div>
+        <div class="tc-body"><div class="tc-name">Cairo City Tour</div><div class="tc-loc">📍 Cairo · 8hrs · EGP 650/person</div><div class="tc-foot"><div class="tc-price">Explore →</div><span style="font-size:.72rem;color:var(--muted)">★ 4.9</span></div></div>
+      </div>
+      <div class="tc" onclick="launchDest('white-desert')">
+        <div class="tc-thumb" style="background:#EFF6FF">🏜️<div class="tc-badge">✈️ Virtual Tour</div></div>
+        <div class="tc-body"><div class="tc-name">White Desert</div><div class="tc-loc">📍 Bahariya · 2 Days · EGP 1,800</div><div class="tc-foot"><div class="tc-price">Explore →</div><span style="font-size:.72rem;color:var(--muted)">★ 4.8</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feats">
+    <div class="feats-in">
+      <h2>Everything in one place</h2>
+      <p>Built as a complete tourism platform for Egypt.</p>
+      <div class="feat-grid">
+        <div class="feat"><div class="feat-ico">✈️</div><div class="feat-t">Virtual Destination Tour</div><div class="feat-d">Fly to any destination before you book — see landmarks, timeline, and tips.</div></div>
+        <div class="feat"><div class="feat-ico">🤖</div><div class="feat-t">AI Itinerary Generator</div><div class="feat-d">Full day plans with places, timing, and cost estimates.</div></div>
+        <div class="feat"><div class="feat-ico">📊</div><div class="feat-t">Budget Optimizer</div><div class="feat-d">Balances transport, entry fees, and food. Suggests cheaper alternatives.</div></div>
+        <div class="feat"><div class="feat-ico">🔖</div><div class="feat-t">Save Trips</div><div class="feat-d">Wishlist any tour and revisit it whenever you're ready.</div></div>
+        <div class="feat"><div class="feat-ico">⭐</div><div class="feat-t">Rating System</div><div class="feat-d">Rate places and read honest traveller reviews.</div></div>
+        <div class="feat"><div class="feat-ico">📤</div><div class="feat-t">Share with Friends</div><div class="feat-d">Share your trip plans via link or social media.</div></div>
+      </div>
+    </div>
+  </div>
+  <footer>© 2026 <em>TripNest</em> · Smart Tourism Management Platform · Graduation Project 🇪🇬</footer>
+</div>
+
+<!-- ══════════════════════════════
+     AUTH
+══════════════════════════════ -->
+<div id="auth-pg" class="pg">
+  <div class="auth-l">
+    <div class="logo">Trip<span>Nest</span></div>
+    <h2>Plan smarter,<br>travel <i>better.</i></h2>
+    <p>Join thousands discovering Egypt's best experiences through TripNest.</p>
+    <div class="auth-perks">
+      <div class="perk"><div class="perk-i">✈️</div><div><strong>Virtual Destination Tours</strong><span>Fly to any destination and explore before booking.</span></div></div>
+      <div class="perk"><div class="perk-i">🤖</div><div><strong>AI Itinerary Generator</strong><span>Full day plans with places, timing & costs.</span></div></div>
+      <div class="perk"><div class="perk-i">📊</div><div><strong>Budget Optimizer</strong><span>Auto-balances transport, entry & food costs.</span></div></div>
+    </div>
+  </div>
+  <div class="auth-r">
+    <button class="auth-back" onclick="goPage('landing')">← Back</button>
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <button class="auth-tab on" id="t-in" onclick="swTab('login')">Sign In</button>
+        <button class="auth-tab" id="t-up" onclick="swTab('register')">Register</button>
+      </div>
+      <div id="f-login" class="aform">
+        <h3>Welcome back 👋</h3>
+        <p class="sub">Sign in to your TripNest account</p>
+        <div class="field" ><label>Email</label><input  id="l-e" type="email" placeholder="you@example.com" required></div>
+        <div class="field"><label>Password</label><input id="l-p" type="password" placeholder="••••••••"></div>
+        <button class="asubmit" onclick="doSignIn()">Sign In →</button>
+        <div class="or-div">or</div>
+        <p class="sw">No account? <a onclick="swTab('register')">Register free</a></p>
+      </div>
+      <div id="f-reg" class="aform" style="display:none">
+        <h3>Create account ✨</h3>
+        <p class="sub">Free forever · No credit card needed</p>
+        <div class="g2">
+          <div class="field"><label>First Name</label><input id="r-fn" type="text" placeholder="Ahmed"></div>
+          <div class="field"><label>Last Name</label><input id="r-ln" type="text" placeholder="Hassan"></div>
+        </div>
+        <div class="field"><label>Email</label><input id="r-e" type="email" placeholder="you@example.com"></div>
+        <div class="field"><label>Password</label><input id="r-p" type="password" placeholder="Create a password"></div>
+        <button class="asubmit" onclick="doSignUp()">Create My Account →</button>
+        <div class="or-div">or</div>
+        <p class="sw">Have an account? <a onclick="swTab('login')">Sign In</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     DASHBOARD
+══════════════════════════════ -->
+<div id="dash-pg" class="pg">
+  <aside class="sb">
+    <div class="logo">Trip<span>Nest</span></div>
+    <nav class="sb-nav">
+      <button class="nb on"  onclick="showP('overview',this)"><span class="nb-ico">🏠</span>Overview</button>
+      <button class="nb" onclick="showP('explore',this)"><span class="nb-ico">✈️</span>Virtual Tours</button>
+      <button class="nb" onclick="showP('saved',this)"><span class="nb-ico">🔖</span>Saved Trips</button>
+      <button class="nb" onclick="showP('offers',this)"><span class="nb-ico">🏷️</span>Offers</button>
+      <button class="nb" onclick="showP('ratings',this)"><span class="nb-ico">⭐</span>Ratings</button>
+      <button class="nb" onclick="showP('settings',this)"><span class="nb-ico">⚙️</span>Settings</button>
+    </nav>
+    <div class="sb-foot">
+      <div class="av" id="d-av">A</div>
+      <div><div class="sb-un" id="d-nm">Ahmed</div><div class="sb-rl">Member</div></div>
+      <button class="sb-lo" onclick="doLogout()" title="Logout">↩</button>
+    </div>
+  </aside>
+
+  <main class="dmain">
+    <div class="dtop">
+      <div><h1 id="d-greet">Good morning, Ahmed 👋</h1><p>Ready for your next Egyptian adventure?</p></div>
+      <button class="btn btn-teal" onclick="goPage('landing')">✈️ Virtual Tour</button>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div id="p-overview" class="panel on">
+      <div class="stats">
+        <div class="sc"><div class="sc-ico">🗺️</div><div class="sc-n">3</div><div class="sc-l">Saved Trips</div></div>
+        <div class="sc"><div class="sc-ico">✅</div><div class="sc-n">1</div><div class="sc-l">Booked</div></div>
+        <div class="sc"><div class="sc-ico">⭐</div><div class="sc-n">2</div><div class="sc-l">Reviews</div></div>
+        <div class="sc"><div class="sc-ico">🏷️</div><div class="sc-n">15%</div><div class="sc-l">My Discount</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 295px;gap:1.3rem">
+        <div style="display:flex;flex-direction:column;gap:1.3rem">
+          <div class="w">
+            <div class="wh"><p>🔖 Saved Trips</p><a onclick="showP('saved',document.querySelector('.nb:nth-child(3)'))">See all →</a></div>
+            <div class="tr"><div class="tr-ico">🔺</div><div class="tr-info"><div class="tr-name">Pyramids & Saqqara</div><div class="tr-sub">📍 Giza · Private · 2 people · 8hrs</div></div><div class="tr-r"><div class="tr-price">EGP 1,700</div><span class="pill pill-amber" style="margin-top:.25rem;font-size:.62rem">Saved</span></div></div>
+            <div class="tr"><div class="tr-ico">🏜️</div><div class="tr-info"><div class="tr-name">White Desert Oasis</div><div class="tr-sub">📍 Bahariya · 2 Days · 2 people</div></div><div class="tr-r"><div class="tr-price">EGP 3,600</div><span class="pill pill-amber" style="margin-top:.25rem;font-size:.62rem">Saved</span></div></div>
+            <div class="tr"><div class="tr-ico">🚢</div><div class="tr-info"><div class="tr-name">Nile Cruise Dinner</div><div class="tr-sub">📍 Cairo · Evening · 2 people</div></div><div class="tr-r"><div class="tr-price">EGP 900</div><span class="pill pill-green" style="margin-top:.25rem;font-size:.62rem">Booked ✓</span></div></div>
+          </div>
+          <div class="w">
+            <div class="wh"><p>🎯 Recommended for You</p></div>
+            <div class="rr" onclick="goPage('landing');toast('✈️ Starting virtual tour...')"><div class="rr-ico">🔺</div><div class="rr-info"><div class="rr-name">Pyramids of Giza</div><div class="rr-sub">✈️ Click to take virtual tour · ★ 5.0</div></div><div class="rr-price">EGP 850</div></div>
+            <div class="rr" onclick="goPage('landing');toast('✈️ Starting virtual tour...')"><div class="rr-ico">🏖️</div><div class="rr-info"><div class="rr-name">Alexandria Day</div><div class="rr-sub">✈️ Click to take virtual tour · ★ 4.9</div></div><div class="rr-price">EGP 750</div></div>
+            <div class="rr" onclick="goPage('landing');toast('✈️ Starting virtual tour...')"><div class="rr-ico">🐋</div><div class="rr-info"><div class="rr-name">Faiyum Nature Tour</div><div class="rr-sub">✈️ Click to take virtual tour · ★ 4.7</div></div><div class="rr-price">EGP 600</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1.3rem">
+          <div style="border-radius:var(--r);overflow:hidden">
+            <div class="offer-box">
+              <div class="offer-tag">Welcome Gift 🎁</div>
+              <div class="offer-t">15% Off First Booking</div>
+              <div class="offer-s">Valid on any tour. No minimum.</div>
+              <div class="offer-code">NEST15</div>
+            </div>
+            <div style="background:#fff;border:1.5px solid var(--border);border-top:none;border-radius:0 0 var(--r) var(--r);padding:1rem">
+              <div style="font-size:.83rem;font-weight:700;margin-bottom:.3rem;color:var(--ink)">🌙 Weekend Special</div>
+              <div style="font-size:.76rem;color:var(--muted);line-height:1.6">Book any multi-day tour this weekend and get free hotel pickup.</div>
+            </div>
+          </div>
+          <div class="w">
+            <div class="wh"><p>✨ Quick AI Plan</p></div>
+            <div class="ai-form">
+              <div class="field"><label>Destination</label>
+                <select id="qd"><option>Cairo</option><option>Giza – Pyramids</option><option>Alexandria</option><option>White Desert</option><option>Faiyum</option></select>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem">
+                <div class="field"><label>People</label><input type="number" id="qp" value="2" min="1"></div>
+                <div class="field"><label>Budget EGP</label><input type="number" id="qb" value="800"></div>
+              </div>
+              <button class="gen-btn" onclick="runAI()">✨ Generate Plan</button>
+              <div class="ai-out" id="qr"><div class="ai-out-t" id="qt"></div><p id="qrb"></p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPLORE / VIRTUAL TOURS -->
+    <div id="p-explore" class="panel">
+      <div class="w" style="margin-bottom:1.4rem">
+        <div class="wh"><p>✈️ Pick a Destination for Virtual Tour</p></div>
+        <p style="font-size:.83rem;color:var(--muted);margin-bottom:1.3rem">Click any destination to take an immersive virtual flyover tour</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem">
+          <div class="rr" style="flex-direction:column;align-items:flex-start;padding:1.2rem;border-radius:14px;border:1.5px solid var(--border)" onclick="goPage('landing');setTimeout(()=>launchDest('pyramids'),100)">
+            <div style="font-size:2.5rem;margin-bottom:.5rem">🔺</div>
+            <div style="font-size:.9rem;font-weight:700">Pyramids of Giza</div>
+            <div style="font-size:.73rem;color:var(--muted);margin-top:.2rem">✈️ Virtual Tour Available · ★ 5.0</div>
+            <div style="font-size:.85rem;font-weight:800;color:var(--teal);margin-top:.5rem">EGP 850/person</div>
+          </div>
+          <div class="rr" style="flex-direction:column;align-items:flex-start;padding:1.2rem;border-radius:14px;border:1.5px solid var(--border)" onclick="goPage('landing');setTimeout(()=>launchDest('cairo'),100)">
+            <div style="font-size:2.5rem;margin-bottom:.5rem">🏛️</div>
+            <div style="font-size:.9rem;font-weight:700">Cairo City Tour</div>
+            <div style="font-size:.73rem;color:var(--muted);margin-top:.2rem">✈️ Virtual Tour Available · ★ 4.9</div>
+            <div style="font-size:.85rem;font-weight:800;color:var(--teal);margin-top:.5rem">EGP 650/person</div>
+          </div>
+          <div class="rr" style="flex-direction:column;align-items:flex-start;padding:1.2rem;border-radius:14px;border:1.5px solid var(--border)" onclick="goPage('landing');setTimeout(()=>launchDest('alexandria'),100)">
+            <div style="font-size:2.5rem;margin-bottom:.5rem">🏖️</div>
+            <div style="font-size:.9rem;font-weight:700">Alexandria</div>
+            <div style="font-size:.73rem;color:var(--muted);margin-top:.2rem">✈️ Virtual Tour Available · ★ 4.9</div>
+            <div style="font-size:.85rem;font-weight:800;color:var(--teal);margin-top:.5rem">EGP 750/person</div>
+          </div>
+          <div class="rr" style="flex-direction:column;align-items:flex-start;padding:1.2rem;border-radius:14px;border:1.5px solid var(--border)" onclick="goPage('landing');setTimeout(()=>launchDest('white-desert'),100)">
+            <div style="font-size:2.5rem;margin-bottom:.5rem">🏜️</div>
+            <div style="font-size:.9rem;font-weight:700">White Desert</div>
+            <div style="font-size:.73rem;color:var(--muted);margin-top:.2rem">✈️ Virtual Tour Available · ★ 4.8</div>
+            <div style="font-size:.85rem;font-weight:800;color:var(--teal);margin-top:.5rem">EGP 1,800/person</div>
+          </div>
+          <div class="rr" style="flex-direction:column;align-items:flex-start;padding:1.2rem;border-radius:14px;border:1.5px solid var(--border)" onclick="goPage('landing');setTimeout(()=>launchDest('nile'),100)">
+            <div style="font-size:2.5rem;margin-bottom:.5rem">🚢</div>
+            <div style="font-size:.9rem;font-weight:700">Nile Cruise</div>
+            <div style="font-size:.73rem;color:var(--muted);margin-top:.2rem">✈️ Virtual Tour Available · ★ 4.8</div>
+            <div style="font-size:.85rem;font-weight:800;color:var(--teal);margin-top:.5rem">EGP 450/person</div>
+          </div>
+          <div class="rr" style="flex-direction:column;align-items:flex-start;padding:1.2rem;border-radius:14px;border:1.5px solid var(--border)" onclick="goPage('landing');setTimeout(()=>launchDest('faiyum'),100)">
+            <div style="font-size:2.5rem;margin-bottom:.5rem">🐋</div>
+            <div style="font-size:.9rem;font-weight:700">Faiyum</div>
+            <div style="font-size:.73rem;color:var(--muted);margin-top:.2rem">✈️ Virtual Tour Available · ★ 4.7</div>
+            <div style="font-size:.85rem;font-weight:800;color:var(--teal);margin-top:.5rem">EGP 600/person</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAVED -->
+    <div id="p-saved" class="panel">
+      <div class="w">
+        <div class="wh"><p>🔖 My Saved Trips</p></div>
+        <div class="tr"><div class="tr-ico">🔺</div><div class="tr-info"><div class="tr-name">Pyramids & Saqqara</div><div class="tr-sub">📍 Giza · EGP 850/person · ★ 5.0</div></div><div class="tr-r" style="display:flex;gap:.4rem;align-items:center"><button class="btn btn-teal btn-sm" onclick="toast('✅ Booked!')">Book</button><button class="btn btn-ghost btn-sm" onclick="toast('🗑️ Removed')">🗑️</button></div></div>
+        <div class="tr"><div class="tr-ico">🏜️</div><div class="tr-info"><div class="tr-name">White Desert Oasis</div><div class="tr-sub">📍 Bahariya · EGP 1,800/person · ★ 4.8</div></div><div class="tr-r" style="display:flex;gap:.4rem;align-items:center"><button class="btn btn-teal btn-sm" onclick="toast('✅ Booked!')">Book</button><button class="btn btn-ghost btn-sm" onclick="toast('🗑️ Removed')">🗑️</button></div></div>
+        <div class="tr"><div class="tr-ico">🚢</div><div class="tr-info"><div class="tr-name">Nile Cruise Dinner</div><div class="tr-sub">📍 Cairo · EGP 450/person · ★ 4.8</div></div><div class="tr-r"><span class="pill pill-green">Booked ✓</span></div></div>
+      </div>
+    </div>
+
+    <!-- OFFERS -->
+    <div id="p-offers" class="panel">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-bottom:1.4rem">
+        <div class="offer-box" style="border-radius:var(--r)"><div class="offer-tag">Welcome</div><div class="offer-t">15% Off</div><div class="offer-s">Any tour. No minimum.</div><div class="offer-code">NEST15</div></div>
+        <div class="offer-box" style="border-radius:var(--r);background:linear-gradient(135deg,#1E3A5F,#0A5C8B)"><div class="offer-tag" style="color:#93C5FD">Weekend</div><div class="offer-t">Free Pickup</div><div class="offer-s">Multi-day Fri–Sat bookings.</div><div class="offer-code">WEEKEND</div></div>
+        <div class="offer-box" style="border-radius:var(--r);background:linear-gradient(135deg,#14532D,#166534)"><div class="offer-tag" style="color:#86EFAC">Groups</div><div class="offer-t">10% Off 6+</div><div class="offer-s">Auto-applied at checkout.</div><div class="offer-code">AUTO</div></div>
+      </div>
+      <div class="w">
+        <div class="wh"><p>🏷️ All Active Offers</p></div>
+        <div class="tr"><div class="tr-ico">🎁</div><div class="tr-info"><div class="tr-name">NEST15 — Welcome Discount</div><div class="tr-sub">15% off · Any tour · No expiry</div></div><div class="tr-r"><span class="pill pill-green">Active</span></div></div>
+        <div class="tr"><div class="tr-ico">🌙</div><div class="tr-info"><div class="tr-name">WEEKEND — Weekend Special</div><div class="tr-sub">Free hotel pickup · Multi-day · Fri–Sat</div></div><div class="tr-r"><span class="pill pill-green">Active</span></div></div>
+        <div class="tr"><div class="tr-ico">🔥</div><div class="tr-info"><div class="tr-name">FLASH30 — Flash Sale</div><div class="tr-sub">30% off Pyramids tour · Ends Sunday</div></div><div class="tr-r"><span class="pill" style="background:#FEE2E2;color:#991B1B">Expiring</span></div></div>
+      </div>
+    </div>
+
+    <!-- RATINGS -->
+    <div id="p-ratings" class="panel">
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:1.3rem">
+        <div class="w">
+          <div class="wh"><p>⭐ Rate a Tour</p></div>
+          <div class="field" style="margin-bottom:.9rem"><label>Select Tour</label>
+            <select><option>Pyramids & Saqqara</option><option>Nile Cruise Dinner</option><option>Cairo City Tour</option></select>
+          </div>
+          <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:var(--muted);margin-bottom:.3rem">Your Rating</div>
+          <div class="star-row">
+            <button class="s-btn" onclick="setStar(1)">★</button>
+            <button class="s-btn" onclick="setStar(2)">★</button>
+            <button class="s-btn" onclick="setStar(3)">★</button>
+            <button class="s-btn" onclick="setStar(4)">★</button>
+            <button class="s-btn" onclick="setStar(5)">★</button>
+          </div>
+          <div class="field" style="margin-top:.8rem"><label>Review</label><input type="text" id="rate-txt" placeholder="Share your experience..."></div>
+          <button class="btn btn-teal" style="margin-top:.9rem" onclick="submitRating()">Submit Rating →</button>
+        </div>
+        <div class="w">
+          <div class="wh"><p>📊 Top Rated</p></div>
+          <div class="rr"><div class="rr-ico">🔺</div><div class="rr-info"><div class="rr-name">Pyramids Tour</div><div class="rr-sub">1,240 reviews</div></div><div style="color:var(--amber);font-weight:700;font-size:.82rem">★ 5.0</div></div>
+          <div class="rr"><div class="rr-ico">🏛️</div><div class="rr-info"><div class="rr-name">Cairo City</div><div class="rr-sub">980 reviews</div></div><div style="color:var(--amber);font-weight:700;font-size:.82rem">★ 4.9</div></div>
+          <div class="rr"><div class="rr-ico">🏖️</div><div class="rr-info"><div class="rr-name">Alexandria</div><div class="rr-sub">720 reviews</div></div><div style="color:var(--amber);font-weight:700;font-size:.82rem">★ 4.9</div></div>
+          <div class="rr"><div class="rr-ico">🏜️</div><div class="rr-info"><div class="rr-name">White Desert</div><div class="rr-sub">640 reviews</div></div><div style="color:var(--amber);font-weight:700;font-size:.82rem">★ 4.8</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="p-settings" class="panel">
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:1.3rem">
+        <div class="w">
+          <div class="settings-s">
+            <h3>👤 Personal Info</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.85rem">
+              <div class="field"><label>First Name</label><input type="text" id="s-fn" value="Ahmed"></div>
+              <div class="field"><label>Last Name</label><input type="text" id="s-ln" value="Hassan"></div>
+            </div>
+            <div class="field" style="margin-bottom:.85rem"><label>Email</label><input type="email" value="ahmed@example.com"></div>
+            <div class="field"><label>Phone</label><input type="tel" placeholder="+20 100 000 0000"></div>
+          </div>
+          <div class="settings-s">
+            <h3>🎯 Travel Preferences</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.85rem">
+              <div class="field"><label>Preferred Destination</label><select><option>Cairo</option><option>Giza</option><option>Alexandria</option></select></div>
+              <div class="field"><label>Trip Style</label><select><option>Cultural</option><option>Adventure</option><option>Mixed</option></select></div>
+            </div>
+            <div class="field"><label>Default Budget</label><select><option>Under EGP 500</option><option selected>EGP 500–1,000</option><option>EGP 1,000–2,500</option></select></div>
+          </div>
+          <button class="btn btn-teal" onclick="toast('✅ Settings saved!')">Save Changes</button>
+        </div>
+        <div class="w">
+          <div class="wh"><p>🔔 Notifications</p></div>
+          <div class="tog-row"><span>New deals & offers</span><input type="checkbox" checked></div>
+          <div class="tog-row"><span>Trip reminders</span><input type="checkbox" checked></div>
+          <div class="tog-row"><span>New recommendations</span><input type="checkbox"></div>
+          <div class="tog-row"><span>Friend activity</span><input type="checkbox"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══════════════════════════════
+     ✈️ FLYOVER ANIMATION
+══════════════════════════════ -->
+<div id="flyover-pg">
+  <div class="sky" id="fly-sky"></div>
+  <div class="stars-wrap" id="fly-stars"></div>
+  <div class="clouds-wrap" id="fly-clouds"></div>
+  <div class="ground" id="fly-ground"></div>
+  <div class="speed-lines" id="fly-speed">
+    <div class="sp-line" style="top:20%;left:0;width:60%;animation-delay:0s;animation-duration:.35s"></div>
+    <div class="sp-line" style="top:35%;left:0;width:80%;animation-delay:.05s;animation-duration:.38s"></div>
+    <div class="sp-line" style="top:50%;left:0;width:55%;animation-delay:.1s;animation-duration:.32s"></div>
+    <div class="sp-line" style="top:62%;left:0;width:70%;animation-delay:.15s;animation-duration:.4s"></div>
+    <div class="sp-line" style="top:75%;left:0;width:65%;animation-delay:.08s;animation-duration:.36s"></div>
+  </div>
+  <div class="plane-wrap"><div class="plane-svg">✈️</div></div>
+  <div class="fly-status">
+    <p id="fly-status-txt">Preparing for takeoff...</p>
+    <div class="fly-dest-name" id="fly-dest-name"></div>
+    <div class="fly-pct" id="fly-pct">0%</div>
+  </div>
+  <div class="fly-loadbar" id="fly-loadbar"></div>
+</div>
+
+<!-- ══════════════════════════════
+     DESTINATION OVERVIEW
+══════════════════════════════ -->
+<div id="dest-pg">
+  <button class="dest-back" onclick="closeDest()">← Back</button>
+  <div class="dest-hero" id="dest-hero">
+    <div class="dest-hero-bg" id="dest-hero-bg"></div>
+    <div class="dest-hero-overlay"></div>
+    <div class="dest-hero-content">
+      <div class="dest-country" id="dest-country"></div>
+      <div class="dest-title" id="dest-title"></div>
+      <div class="dest-tagline" id="dest-tagline"></div>
+      <div class="dest-quick-facts" id="dest-facts"></div>
+    </div>
+  </div>
+
+  <div class="dest-body">
+    <!-- Info strip -->
+    <div class="info-strip" id="dest-info-strip"></div>
+
+    <!-- Top places -->
+    <div class="dest-section-title" id="dest-places-title"></div>
+    <div class="dest-section-sub" id="dest-places-sub"></div>
+    <div class="places-grid" id="dest-places-grid"></div>
+
+    <!-- Day timeline -->
+    <div class="dest-section-title">🗓️ Sample Day Plan</div>
+    <div class="dest-section-sub" style="color:rgba(255,255,255,.4);font-size:.85rem;margin-bottom:1.4rem">A typical day visiting this destination</div>
+    <div class="timeline" id="dest-timeline" style="margin-bottom:3rem"></div>
+
+    <!-- Best season -->
+    <div class="dest-section-title">🌤️ Best Time to Visit</div>
+    <div class="dest-section-sub" style="color:rgba(255,255,255,.4);font-size:.85rem;margin-bottom:1rem">Green = ideal months for this destination</div>
+    <div class="season-bar" id="dest-seasons" style="margin-bottom:3rem"></div>
+
+    <!-- CTA -->
+    <div class="dest-cta">
+      <div>
+        <h3>Ready to book this trip?</h3>
+        <p>Get a full AI-generated itinerary with budget breakdown in seconds.</p>
+      </div>
+      <div class="dest-cta-btns">
+        <button class="btn btn-white" onclick="closeDest();toast('🤖 Generating your AI itinerary...')">✨ Get AI Itinerary</button>
+        <button class="btn" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2)" onclick="toast('🔖 Trip saved!')">🔖 Save Trip</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast-el"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   DESTINATION DATA
+══════════════════════════════════════════ */
+const DESTS = {
+  'pyramids': {
+    emoji: '🔺',
+    country: '📍 Egypt — Giza',
+    title: 'The Pyramids of Giza',
+    tagline: 'The last surviving wonder of the ancient world. Towering limestone giants that have witnessed 4,500 years of human history.',
+    facts: ['⏱ 8 Hours', '💰 EGP 850/person', '👥 Private Tour', '🌟 Wonder of the World'],
+    info: [
+      {ico:'🗿',val:'4,500 yrs',lbl:'History'},
+      {ico:'📐',val:'138.5m',lbl:'Great Pyramid Height'},
+      {ico:'🎟️',val:'EGP 200',lbl:'Entry Fee'},
+      {ico:'🌅',val:'8am',lbl:'Best Time to Arrive'},
+    ],
+    places: [
+      {ico:'🔺',name:'Great Pyramid of Khufu',desc:'The largest and oldest of the Giza pyramids. Originally 146m tall, it held the record as the world\'s tallest man-made structure for 3,800 years.',tags:['UNESCO','Must See','Icon']},
+      {ico:'🦁',name:'The Great Sphinx',desc:'A limestone statue 73 meters long with the body of a lion and the face of a pharaoh. One of the world\'s most recognizable monuments.',tags:['Landmark','Ancient']},
+      {ico:'🏛️',name:'Pyramid of Khafre',desc:'The second-largest Giza pyramid, still retaining some of its original polished limestone casing at the top. Appears taller due to its elevated position.',tags:['Pyramid','Pharaoh']},
+      {ico:'🔬',name:'Solar Boat Museum',desc:'Houses a reconstructed 4,600-year-old cedar wood boat discovered in a pit next to Khufu\'s pyramid. An extraordinary archaeological treasure.',tags:['Museum','History']},
+      {ico:'💎',name:'Dashur — Bent & Red Pyramids',desc:'Two older, less-crowded pyramids 30km south. The Bent Pyramid shows the evolution of pyramid design. You can enter the Red Pyramid for free.',tags:['Hidden Gem','Nearby']},
+      {ico:'📜',name:'Memphis & Saqqara',desc:'Egypt\'s ancient capital and the Step Pyramid of Djoser — the world\'s oldest stone pyramid, dating to 2650 BC.',tags:['Day Extension','Nearby']},
+    ],
+    timeline: [
+      {t:'8:00 AM',txt:'Arrive at the Pyramids of Giza. Start with the Great Pyramid before the crowds arrive. Golden morning light makes for stunning photos.'},
+      {t:'10:00 AM',txt:'Visit the Great Sphinx and the Valley Temple. Learn about the ancient funerary complex from your private guide.'},
+      {t:'12:00 PM',txt:'Drive to Saqqara — the Step Pyramid of Djoser. Less crowded and equally impressive. Walk through the funerary complex.'},
+      {t:'1:30 PM',txt:'Lunch break at a local restaurant near Memphis village. Try traditional Egyptian koshari or grilled kofta.'},
+      {t:'3:00 PM',txt:'Memphis open-air museum — see the colossal statue of Ramesses II. Then the Solar Boat Museum next to Khufu\'s pyramid.'},
+      {t:'4:30 PM',txt:'Optional: Drive to Dashur for the Bent and Red Pyramids. Quieter, more intimate, and you can enter the Red Pyramid!'},
+    ],
+    seasons: {best:['Oct','Nov','Dec','Jan','Feb','Mar'],ok:['Apr','Sep'],avoid:['May','Jun','Jul','Aug']},
+    bgColor: 'linear-gradient(135deg,#2D1B00,#8B5E1A,#D4A047)',
+  },
+  'cairo': {
+    emoji: '🏛️',
+    country: '📍 Egypt — Cairo',
+    title: 'Cairo City Tour',
+    tagline: 'A living museum where medieval Islamic architecture meets Coptic Christianity and ancient Egyptian legacy — all in one electric city.',
+    facts: ['⏱ 8 Hours', '💰 EGP 650/person', '👥 Private Tour', '🌆 City of Minarets'],
+    info: [
+      {ico:'🕌',name:'Mosques',val:'1,000+',lbl:'Historic Mosques'},
+      {ico:'🏛️',name:'Museums',val:'20+',lbl:'World-Class Museums'},
+      {ico:'🎟️',val:'EGP 80',lbl:'Avg Entry Fee'},
+      {ico:'🌅',val:'9am',lbl:'Best Start Time'},
+    ],
+    places: [
+      {ico:'🏰',name:'Citadel of Salah Al-Din',desc:'A medieval Islamic fortification on a limestone spur. Home to the stunning Mohammed Ali Mosque with its Ottoman domes and breathtaking Cairo views.',tags:['Must See','Panoramic View']},
+      {ico:'🕌',name:'Mohammed Ali Mosque',desc:'Known as the Alabaster Mosque, built between 1830–1848. Its twin minarets rise 82 meters. The interior is breathtaking with natural light filtering through hundreds of chandeliers.',tags:['Mosque','Landmark']},
+      {ico:'✝️',name:'Coptic Cairo',desc:'One of the world\'s oldest Christian communities. Visit 7 ancient churches including the Hanging Church (4th century) and the Ben Ezra Synagogue.',tags:['Religious','Historic','Unique']},
+      {ico:'🕌',name:'Amr Ibn Al-Aas Mosque',desc:'The oldest mosque in Egypt and Africa, built in 642 AD. A simple, serene space that has been expanded and rebuilt over centuries.',tags:['Oldest','Coptic Area']},
+      {ico:'🛍️',name:'Khan El-Khalili Bazaar',desc:'A labyrinthine medieval bazaar dating to 1382. Hundreds of stalls sell spices, gold, hand-crafted lamps, perfumes, and souvenirs. Haggling is expected!',tags:['Shopping','Authentic','Food']},
+      {ico:'🏘️',name:'Al-Moez Street',desc:'The oldest street in Cairo and a UNESCO treasure. A 1km stretch lined with perfectly preserved Mamluk architecture. Best walked at golden hour.',tags:['UNESCO','Architecture','Walk']},
+    ],
+    timeline: [
+      {t:'9:00 AM',txt:'Start at the Citadel of Salah Al-Din. Explore the Mohammed Ali Mosque and enjoy panoramic views over Cairo.'},
+      {t:'11:00 AM',txt:'Drive to Coptic Cairo. Walk through the complex of 7 ancient churches, the Hanging Church, and Ben Ezra Synagogue.'},
+      {t:'1:00 PM',txt:'Lunch at a traditional Egyptian restaurant near the Coptic area. Try ful, ta\'ameya, and fresh bread.'},
+      {t:'2:30 PM',txt:'Khan El-Khalili bazaar — wander the medieval alleys, drink mint tea in El-Fishawi coffeehouse (open since 1773!).'},
+      {t:'4:00 PM',txt:'Walk Al-Moez Street as the afternoon light turns golden. Stop at the Qalawun Complex and Al-Ghouri mausoleum.'},
+      {t:'6:00 PM',txt:'Optional: Sunset from a Nile-side café. Watch the city glow orange over the river.'},
+    ],
+    seasons: {best:['Oct','Nov','Dec','Jan','Feb','Mar','Apr'],ok:['May','Sep'],avoid:['Jun','Jul','Aug']},
+    bgColor: 'linear-gradient(135deg,#0D1B2A,#1B4F72,#2E86AB)',
+  },
+  'alexandria': {
+    emoji: '🏖️',
+    country: '📍 Egypt — Mediterranean Coast',
+    title: 'Alexandria',
+    tagline: 'Where the Mediterranean meets ancient history. A city of conquerors, philosophers, and poets — with the freshest seafood in Egypt.',
+    facts: ['⏱ Full Day', '💰 EGP 750/person', '🚗 2.5hrs from Cairo', '🌊 Mediterranean City'],
+    info: [
+      {ico:'📚',val:'7th Wonder',lbl:'Library of Alexandria'},
+      {ico:'🏰',val:'15th Century',lbl:'Qaitbay Citadel'},
+      {ico:'🎟️',val:'EGP 100',lbl:'Avg Entry Fee'},
+      {ico:'🚂',val:'7:00 AM',lbl:'Depart Cairo'},
+    ],
+    places: [
+      {ico:'⚰️',name:'Catacombs of Kom El-Shoqafa',desc:'Discovered in 1900. A 2nd-century underground necropolis combining Egyptian, Greek, and Roman art — a one-of-a-kind fusion. One of the Seven Wonders of the Middle Ages.',tags:['UNESCO','Unique','Underground']},
+      {ico:'🏰',name:'Qaitbay Citadel',desc:'Built in 1477 on the exact site of the legendary Lighthouse of Alexandria (one of the 7 ancient wonders). Sits dramatically on a peninsula surrounded by sea.',tags:['Must See','Lighthouse Site','Views']},
+      {ico:'🗿',name:"Pompey's Pillar",desc:'A 30-meter Roman triumphal column erected in 300 AD — the tallest ancient column outside Rome. Stands guard over the ancient Serapeum temple ruins.',tags:['Roman','Historic']},
+      {ico:'📚',name:'Bibliotheca Alexandrina',desc:'The modern reincarnation of the ancient Library of Alexandria. A stunning 2002 building housing 8 million books, 4 museums, and a planetarium.',tags:['Modern','Cultural','Must See']},
+      {ico:'🎨',name:'Alexandria Museum',desc:'The National Museum of Alexandria holds artifacts from Pharaonic, Roman, Coptic, and Islamic periods — including pieces recovered from Alexandria\'s sunken royal quarters.',tags:['Museum','History']},
+      {ico:'🦑',name:'Abu Qir Seafood',desc:'Drive 25km east to Abu Qir for the most legendary seafood in Egypt. Fresh-caught fish, shrimp, and calamari grilled at waterfront restaurants.',tags:['Food','Local Secret']},
+    ],
+    timeline: [
+      {t:'7:00 AM',txt:'Depart Cairo by private car or train. Arrive in Alexandria around 9:30am as the city wakes up.'},
+      {t:'9:30 AM',txt:'Catacombs of Kom El-Shoqafa — underground tombs with incredible Egyptian-Roman-Greek fusion art. Very few tourists this early.'},
+      {t:'11:00 AM',txt:'Drive to Qaitbay Citadel. Walk the ramparts with panoramic sea views. Built on the site of the ancient Lighthouse of Alexandria.'},
+      {t:'12:30 PM',txt:'Lunch at a local seafood restaurant on the Corniche. Try fresh fish, shrimp, and Egyptian salads with sea views.'},
+      {t:'2:30 PM',txt:'Pompey\'s Pillar and the Serapeum ruins — ancient Roman Alexandria. Then the stunning Bibliotheca Alexandrina.'},
+      {t:'5:30 PM',txt:'Depart for Cairo. Optional stop: watch the sunset at Montazah Palace gardens on the way out.'},
+    ],
+    seasons: {best:['Apr','May','Jun','Sep','Oct','Nov'],ok:['Mar','Dec'],avoid:['Jan','Feb','Jul','Aug']},
+    bgColor: 'linear-gradient(135deg,#003D5B,#006994,#0099CC)',
+  },
+  'white-desert': {
+    emoji: '🏜️',
+    country: '📍 Egypt — Western Desert, Bahariya Oasis',
+    title: 'White Desert & Oasis',
+    tagline: 'An alien landscape of ivory chalk formations, black volcanic hills, and star-filled skies so clear you feel you could touch the Milky Way.',
+    facts: ['⏱ 2 Days, 1 Night', '💰 EGP 1,800/person', '🏕️ Desert Camp', '⭐ Stargazing Paradise'],
+    info: [
+      {ico:'🌡️',val:'18°C',lbl:'Night Temperature'},
+      {ico:'🏕️',val:'1 Night',lbl:'Desert Camp'},
+      {ico:'🚙',val:'Jeep',lbl:'Transport Mode'},
+      {ico:'⭐',val:'Zero',lbl:'Light Pollution'},
+    ],
+    places: [
+      {ico:'⬜',name:'White Desert National Park',desc:'Surreal chalk-white rock formations shaped by millennia of wind erosion. Mushroom, chicken, and rabbit-shaped rocks glow amber at sunrise and ghostly white under moonlight.',tags:['UNESCO Protected','Must See','Unique on Earth']},
+      {ico:'⬛',name:'Black Desert',desc:'Volcanic mountains blanketed in black dolerite and basalt stones. A dramatic contrast to the white formations nearby. Watch the black turn copper-gold at sunset.',tags:['Volcanic','Landscape','Photography']},
+      {ico:'🌸',name:'Crystal Mountain & Flower Stones',desc:'A ridge of translucent quartz crystals that sparkles in sunlight — one of Egypt\'s geological wonders. Nearby, prehistoric "flower stones" litter the desert floor.',tags:['Geological','Rare','Photography']},
+      {ico:'💧',name:'Warm & Cold Springs',desc:'Natural hot and cold springs bubbling from the desert floor. Locals say the cold spring cures eye ailments. Swimming in the warm spring under open sky is unforgettable.',tags:['Natural','Swimming','Local Secret']},
+      {ico:'🐫',name:'Bedouin Camp Experience',desc:'Sleep under 8,000 stars in a traditional Bedouin camp. Share a fire, eat slow-cooked lamb, drink sweet tea, and hear stories passed down for generations.',tags:['Cultural','Authentic','Overnight']},
+      {ico:'🌅',name:'Sunrise at Chalk Formations',desc:'Wake before dawn and hike 10 minutes to watch the sun ignite the chalk formations in a gradient from deep orange to blinding white. Life-changing.',tags:['Sunrise','Photography','Hike']},
+    ],
+    timeline: [
+      {t:'Day 1 · 7:00 AM',txt:'Depart Cairo by private 4x4. Stop at Bahariya Oasis town to collect camp gear, supplies, and your Bedouin guide.'},
+      {t:'Day 1 · 11:00 AM',txt:'Enter the Black Desert — volcanic black mountains and basalt-covered plains. First stop: Crystal Mountain.'},
+      {t:'Day 1 · 1:00 PM',txt:'Lunch at a Bedouin village in the oasis. Traditional lamb, fresh bread, and sweet tea cooked over an open fire.'},
+      {t:'Day 1 · 3:00 PM',txt:'Drive deep into the White Desert. Visit Flower Stones and the warm and cold springs. Swim in the warm spring.'},
+      {t:'Day 1 · 7:00 PM',txt:'Set up camp between the chalk formations. Bedouin dinner, storytelling, and the most spectacular stargazing of your life.'},
+      {t:'Day 2 · 6:00 AM',txt:'Wake before sunrise. Hike to the best viewpoint and watch the desert ignite in color. Return to Cairo by afternoon.'},
+    ],
+    seasons: {best:['Oct','Nov','Dec','Jan','Feb','Mar'],ok:['Apr','Sep'],avoid:['May','Jun','Jul','Aug']},
+    bgColor: 'linear-gradient(135deg,#1a1a2e,#2C3E50,#4A6741)',
+  },
+  'nile': {
+    emoji: '🚢',
+    country: '📍 Egypt — Cairo, Nile River',
+    title: 'Nile Cruise Dinner',
+    tagline: 'Drift along the river that birthed civilization, with live music, belly dance, and a star-lit deck while Cairo glitters on both banks.',
+    facts: ['⏱ 2 Hours', '💰 EGP 450/person', '🍽️ Open Buffet', '🎭 3 Live Shows'],
+    info: [
+      {ico:'🌊',val:'6,650 km',lbl:'Length of the Nile'},
+      {ico:'🎭',val:'3 Shows',lbl:'Entertainment'},
+      {ico:'🍽️',val:'Open',lbl:'Buffet Dinner'},
+      {ico:'🌙',val:'Evening',lbl:'Experience'},
+    ],
+    places: [
+      {ico:'🎭',name:'Belly Dance Show',desc:'Egypt\'s most iconic art form performed by a professional dancer in full traditional costume. The performance lasts 30 minutes and gets the whole boat involved.',tags:['Entertainment','Cultural','Traditional']},
+      {ico:'🌀',name:'Tanwra (Sufi Spinning)',desc:'A hypnotic Sufi whirling dervish performance — colorful skirts spinning in perfect circles as the dancer enters a meditative trance. Deeply spiritual and beautiful.',tags:['Sufi','Spiritual','Unique']},
+      {ico:'🎤',name:'Egyptian Singer',desc:'Live Arabic music performed by a talented singer. A mix of traditional Um Kulthum classics and modern Egyptian pop. The crowd sings along.',tags:['Music','Live','Arabic']},
+      {ico:'🍲',name:'Open Buffet Dinner',desc:'A generous spread of Egyptian and international dishes — grilled meats, fresh salads, rice dishes, mezze, and traditional desserts. Replenished throughout the cruise.',tags:['Food','All Inclusive']},
+      {ico:'🌃',name:'Cairo Skyline at Night',desc:'See the famous bridges, the Cairo Tower lit up at night, and both banks of the Nile illuminated. The top deck offers a 360° view.',tags:['Views','Photography','Romantic']},
+    ],
+    timeline: [
+      {t:'7:00 PM',txt:'Private pickup from your hotel. Drive to the Nile cruise port in central Cairo.'},
+      {t:'7:30 PM',txt:'Board the cruise. First hour docked at the port — dinner service begins. Open buffet with Egyptian and international dishes.'},
+      {t:'8:30 PM',txt:'Sail begins. The boat moves along the Nile as Cairo glitters on both banks. Find your spot on the top deck.'},
+      {t:'9:00 PM',txt:'Live belly dance performance. Then Sufi Tanwra spinning. Then Egyptian live singing — the full 3-show experience.'},
+      {t:'9:45 PM',txt:'Dessert served. Enjoy the night air on the upper deck as the boat returns to dock.'},
+      {t:'10:00 PM',txt:'Return to port. Private drop-off back to your hotel.'},
+    ],
+    seasons: {best:['Jan','Feb','Mar','Apr','May','Oct','Nov','Dec'],ok:['Jun','Sep'],avoid:['Jul','Aug']},
+    bgColor: 'linear-gradient(135deg,#001B2E,#003459,#00509D)',
+  },
+  'faiyum': {
+    emoji: '🐋',
+    country: '📍 Egypt — Faiyum Governorate',
+    title: 'El Faiyum',
+    tagline: 'A green oasis in the desert where 40-million-year-old whale fossils emerge from the sand and waterfalls pour into shimmering desert lakes.',
+    facts: ['⏱ Full Day', '💰 EGP 600/person', '🦣 40M-yr Fossils', '🏄 Sand Boarding'],
+    info: [
+      {ico:'🐋',val:'40M yrs',lbl:'Whale Fossils Age'},
+      {ico:'💧',val:'330 km²',lbl:'Qarun Lake Size'},
+      {ico:'🎟️',val:'EGP 60',lbl:'Wadi El Hitan Entry'},
+      {ico:'⏱️',val:'7:00 AM',lbl:'Depart Cairo'},
+    ],
+    places: [
+      {ico:'🦣',name:'Wadi El Hitan — Valley of Whales',desc:'One of the most important fossil sites in the world. Complete whale skeletons from 40 million years ago when this desert was an ocean floor. Open-air UNESCO museum — the whales stay exactly where they were found.',tags:['UNESCO','Must See','Prehistoric']},
+      {ico:'🌊',name:'Qarun Lake',desc:'An ancient saltwater lake 45 meters below sea level — one of the oldest in the world. Migrating birds by the thousands, quiet boat rides, and fresh fish from lakeside restaurants.',tags:['Ancient','Nature','Birds']},
+      {ico:'💦',name:'Wadi El Rayan Waterfalls',desc:'Egypt\'s only natural waterfalls, cascading between two desert lakes. Stunning in the morning light. Walk the connecting ridge for panoramic views of both lakes.',tags:['Unique','Photography','Walking']},
+      {ico:'🏔️',name:'Magic Lake (Ain As-Siliyin)',desc:'A natural lake at the foot of the dunes that changes color with the light — from green to blue to silver. Surrounded by sand dunes perfect for boarding.',tags:['Hidden Gem','Photography']},
+      {ico:'🏄',name:'Sand Boarding & Dune Safari',desc:'Rent a board and slide down towering sand dunes above the lakes. The views from the top stretch for kilometers across the desert and water.',tags:['Adventure','Active','Fun']},
+    ],
+    timeline: [
+      {t:'7:00 AM',txt:'Depart Cairo. 1.5-hour drive through the desert through to the Faiyum oasis.'},
+      {t:'9:00 AM',txt:'Wadi El Hitan — Valley of the Whales. 2-hour walk through the outdoor fossil museum. Do not miss the Basilosaurus skeletons.'},
+      {t:'11:30 AM',txt:'Drive to Qarun Lake. Boat ride on the ancient lake. Watch migrating birds and taste fresh lake fish.'},
+      {t:'1:00 PM',txt:'Lakeside lunch — freshly grilled Bolti fish, Egyptian salads, and sweet tea.'},
+      {t:'2:30 PM',txt:'Wadi El Rayan — walk the ridge between the two lakes, see the waterfalls. The lower waterfall is best for photos.'},
+      {t:'4:00 PM',txt:'Sand boarding on the dunes above the Magic Lake. Watch the sun paint the desert in orange and gold before heading back.'},
+    ],
+    seasons: {best:['Oct','Nov','Dec','Jan','Feb','Mar','Apr'],ok:['May','Sep'],avoid:['Jun','Jul','Aug']},
+    bgColor: 'linear-gradient(135deg,#0A3622,#145A32,#1E8449)',
+  },
+};
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/* ══════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════ */
+function goPage(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+}
+function goAuth(tab){goPage('auth-pg');swTab(tab)}
+function swTab(tab){
+  document.getElementById('f-login').style.display=tab==='login'?'flex':'none';
+  document.getElementById('f-reg').style.display=tab==='register'?'flex':'none';
+  document.getElementById('t-in').classList.toggle('on',tab==='login');
+  document.getElementById('t-up').classList.toggle('on',tab==='register');
+}
+
+/* ══════════════════════════════════════════
+   ✈️ FLYOVER ENGINE
+══════════════════════════════════════════ */
+function startFlyover(){
+  const sel = document.getElementById('dest-select-landing').value;
+  if(!sel){ toast('⚠️ Please choose a destination first!'); return; }
+  launchDest(sel);
+}
+
+function launchDest(destKey){
+  const dest = DESTS[destKey];
+  if(!dest) return;
+
+  // Show flyover screen
+  const flyPg = document.getElementById('flyover-pg');
+  flyPg.style.display = 'block';
+  flyPg.style.animation = 'none';
+
+  // Reset sky
+  const sky = document.getElementById('fly-sky');
+  sky.className = 'sky';
+
+  // Build stars
+  buildStars();
+  // Build clouds
+  buildClouds();
+
+  // Status texts
+  const statuses = [
+    'Preparing for takeoff... ✈️',
+    'Taking off from Cairo...',
+    'Climbing to cruising altitude...',
+    'Soaring over Egypt...',
+    'Beginning descent...',
+    `Landing at ${dest.title}!`
+  ];
+
+  const destNameEl = document.getElementById('fly-dest-name');
+  const statusEl   = document.getElementById('fly-status-txt');
+  const pctEl      = document.getElementById('fly-pct');
+  const loadbar    = document.getElementById('fly-loadbar');
+  const speedLines = document.getElementById('fly-speed');
+  const ground     = document.getElementById('fly-ground');
+
+  destNameEl.className = 'fly-dest-name';
+  destNameEl.textContent = dest.title;
+  statusEl.textContent = statuses[0];
+  pctEl.textContent = '0%';
+  loadbar.style.transition = 'none';
+  loadbar.style.width = '0%';
+
+  // Phases
+  let phase = 0;
+  const phases = [
+    {delay:300,  status:statuses[0], pct:0,   speed:false, skyDay:false},
+    {delay:600,  status:statuses[1], pct:15,  speed:false, skyDay:false},
+    {delay:1200, status:statuses[2], pct:35,  speed:true,  skyDay:false},
+    {delay:2000, status:statuses[3], pct:65,  speed:true,  skyDay:true},
+    {delay:2800, status:statuses[4], pct:85,  speed:false, skyDay:true},
+    {delay:3500, status:statuses[5], pct:100, speed:false, skyDay:true},
+  ];
+
+  // Start loadbar animation
+  setTimeout(()=>{
+    loadbar.style.transition = 'width 3.5s cubic-bezier(.4,0,.2,1)';
+    loadbar.style.width = '100%';
+  },100);
+
+  // Show dest name
+  setTimeout(()=>{ destNameEl.classList.add('show'); },800);
+
+  phases.forEach((p,i)=>{
+    setTimeout(()=>{
+      statusEl.textContent = p.status;
+      pctEl.textContent    = p.pct+'%';
+      speedLines.classList.toggle('on', p.speed);
+      if(p.skyDay) sky.classList.add('day');
+      if(i === phases.length-1){
+        // Land!
+        ground.style.height = '65%';
+        setTimeout(()=>{ showDest(destKey); }, 500);
+      }
+    }, p.delay);
+  });
+}
+
+function buildStars(){
+  const wrap = document.getElementById('fly-stars');
+  wrap.innerHTML = '';
+  for(let i=0;i<120;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${Math.random()*70}%;
+      width:${Math.random()*2.5+.5}px;
+      height:${Math.random()*2.5+.5}px;
+      animation-delay:${Math.random()*3}s;
+      animation-duration:${Math.random()*2+1.5}s;
+    `;
+    wrap.appendChild(s);
+  }
+}
+
+function buildClouds(){
+  const wrap = document.getElementById('fly-clouds');
+  wrap.innerHTML = '';
+  const cloudData = [
+    {top:'20%',w:180,h:60,op:.7,dur:6,delay:0},
+    {top:'35%',w:260,h:75,op:.5,dur:9,delay:-3},
+    {top:'15%',w:140,h:45,op:.6,dur:7,delay:-1},
+    {top:'45%',w:200,h:55,op:.4,dur:11,delay:-5},
+    {top:'28%',w:320,h:80,op:.3,dur:8,delay:-2},
+    {top:'55%',w:150,h:40,op:.5,dur:10,delay:-4},
+  ];
+  cloudData.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'cloud';
+    el.style.cssText = `top:${c.top};right:0;width:${c.w}px;height:${c.h}px;opacity:${c.op};animation-duration:${c.dur}s;animation-delay:${c.delay}s`;
+    wrap.appendChild(el);
+  });
+}
+
+/* ══════════════════════════════════════════
+   DESTINATION PAGE
+══════════════════════════════════════════ */
+function showDest(destKey){
+  const d = DESTS[destKey];
+
+  // Hide flyover
+  const flyPg = document.getElementById('flyover-pg');
+  flyPg.style.display = 'none';
+  document.getElementById('fly-ground').style.height = '40%';
+  document.getElementById('fly-sky').classList.remove('day');
+
+  // Populate
+  document.getElementById('dest-hero-bg').textContent = d.emoji;
+  document.getElementById('dest-hero-bg').style.background = d.bgColor;
+  document.getElementById('dest-hero').style.background = d.bgColor;
+  document.getElementById('dest-country').textContent  = d.country;
+  document.getElementById('dest-title').textContent    = d.title;
+  document.getElementById('dest-tagline').textContent  = d.tagline;
+
+  // Quick facts
+  document.getElementById('dest-facts').innerHTML = d.facts.map(f=>`<div class="dest-fact">${f}</div>`).join('');
+
+  // Info strip
+  document.getElementById('dest-info-strip').innerHTML = (d.info||[]).map(i=>`
+    <div class="info-card">
+      <div class="ic-ico">${i.ico}</div>
+      <div class="ic-val">${i.val||i.name||''}</div>
+      <div class="ic-lbl">${i.lbl}</div>
+    </div>`).join('');
+
+  // Places
+  document.getElementById('dest-places-title').textContent = '🏛️ Top Places to Visit';
+  document.getElementById('dest-places-sub').textContent   = 'Everything you\'ll see and experience at this destination';
+  document.getElementById('dest-places-grid').innerHTML = d.places.map((p,i)=>`
+    <div class="place-card" style="animation-delay:${i*.08}s">
+      <div class="pc-ico">${p.ico}</div>
+      <div class="pc-name">${p.name}</div>
+      <div class="pc-desc">${p.desc}</div>
+      <div class="pc-meta">${p.tags.map(t=>`<span class="pc-tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+
+  // Timeline
+  document.getElementById('dest-timeline').innerHTML = d.timeline.map(t=>`
+    <div class="tl-item">
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <div class="tl-dot">⏰</div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-time">${t.t}</div>
+        <div class="tl-txt">${t.txt}</div>
+      </div>
+    </div>`).join('');
+
+  // Seasons
+  document.getElementById('dest-seasons').innerHTML = MONTHS.map(m=>{
+    const isBest = d.seasons.best.includes(m);
+    const isOk   = (d.seasons.ok||[]).includes(m);
+    return `<div class="season-chip ${isBest?'best':''}" style="${isOk?'opacity:.7':''}">
+      ${isBest?'✅':isOk?'🟡':'❌'} ${m}
+    </div>`;
+  }).join('');
+
+  // Show dest page
+  const destPg = document.getElementById('dest-pg');
+  destPg.style.display = 'block';
+  destPg.scrollTop = 0;
+}
+
+function closeDest(){
+  document.getElementById('dest-pg').style.display = 'none';
+}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+let _tt;
+function toast(msg){
+  const el=document.getElementById('toast-el');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),2500);
+}
+
+/* ── Dest chips ── */
+document.querySelectorAll('.dest-chip').forEach(c=>{
+  c.addEventListener('click',()=>{
+    document.querySelectorAll('.dest-chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+  });
+});
+
+/* ══════════════════════════════════════════
+   AUTH FUNCTIONS
+══════════════════════════════════════════ */
+function doSignIn(){
+  const emailEl = document.getElementById('l-e');
+  const email   = emailEl ? emailEl.value.trim() : '';
+  // Extract name from email or use default
+  let name = 'Traveller';
+  if(email && email.includes('@')){
+    name = email.split('@')[0];
+    // Capitalize first letter
+    name = name.charAt(0).toUpperCase() + name.slice(1);
+  } else if(email){
+    name = email.charAt(0).toUpperCase() + email.slice(1);
+  }
+  enterDash(name, name);
+}
+
+function doSignUp(){
+  const fnEl = document.getElementById('r-fn');
+  const lnEl = document.getElementById('r-ln');
+  const fn   = fnEl ? fnEl.value.trim() : '';
+  const ln   = lnEl ? lnEl.value.trim() : '';
+  const first = fn || 'Traveller';
+  const full  = first + (ln ? ' ' + ln : '');
+  enterDash(first, full);
+}
+
+function enterDash(first, full){
+  // update avatar & name in sidebar
+  const av = document.getElementById('d-av');
+  const nm = document.getElementById('d-nm');
+  const gr = document.getElementById('d-greet');
+  if(av) av.textContent = first[0].toUpperCase();
+  if(nm) nm.textContent = full;
+  if(gr) gr.textContent = 'Good morning, ' + first + ' 👋';
+  // reset to overview panel
+  showP('overview', document.querySelector('#dash-pg .nb'));
+  goPage('dash-pg');
+  toast('✅ Welcome, ' + first + '!');
+}
+
+function doLogout(){
+  goPage('landing');
+  toast('👋 Signed out. See you soon!');
+}
+
+/* ══════════════════════════════════════════
+   DASHBOARD PANEL SWITCHER
+══════════════════════════════════════════ */
+function showP(name, btn){
+  document.querySelectorAll('#dash-pg .panel').forEach(p => p.classList.remove('on'));
+  const panel = document.getElementById('p-' + name);
+  if(panel) panel.classList.add('on');
+  document.querySelectorAll('#dash-pg .nb').forEach(b => b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+}
+
+/* ══════════════════════════════════════════
+   AI QUICK PLAN
+══════════════════════════════════════════ */
+const AI_PLANS = {
+  'Cairo':           {t:'🏛️ Cairo Cultural Day',       b:'8:00am Citadel → 11:00am Coptic Area → 1:00pm Lunch → 2:30pm Khan El-Khalili → 5:00pm Al-Moez Street. Est. EGP 650/person.'},
+  'Giza – Pyramids': {t:'🔺 Giza Pyramids Full Day',    b:'8:00am Great Pyramids & Sphinx → 10:30am Saqqara → 1:30pm Lunch → 3:30pm Dashur Bent & Red Pyramids. Est. EGP 850/person.'},
+  'Alexandria':      {t:'🏖️ Alexandria Day',            b:'7:00am Depart Cairo → 9:30am Catacombs → 11:00am Qaitbay Citadel → 1:30pm Seafood lunch → 3:00pm Library of Alexandria. Est. EGP 750/person.'},
+  'White Desert':    {t:'🏜️ White Desert 2-Day',        b:'Day 1: Black Desert → White Desert chalk formations → Bedouin camp. Day 2: Sunrise → Flower Stones → Oasis springs → Return. EGP 1,800/person.'},
+  'Faiyum':          {t:'🌿 Faiyum Nature Day',          b:'7:00am Depart → 9:00am Wadi El Hitan whale fossils → 11:30am Qarun Lake → 1:00pm Lunch → 2:30pm Wadi El Rayan waterfall → 4:00pm Sand Boarding. EGP 600/person.'},
+};
+
+function runAI(){
+  const dest   = document.getElementById('qd').value;
+  const box    = document.getElementById('qr');
+  const btnEl  = box.previousElementSibling;
+  btnEl.textContent = '⏳ Generating...';
+  btnEl.disabled    = true;
+  box.style.display = 'none';
+  setTimeout(()=>{
+    const p = AI_PLANS[dest] || AI_PLANS['Cairo'];
+    document.getElementById('qt').textContent  = p.t;
+    document.getElementById('qrb').textContent = p.b;
+    box.style.display    = 'block';
+    btnEl.textContent    = '✨ Generate Plan';
+    btnEl.disabled       = false;
+  }, 1200);
+}
+
+/* ══════════════════════════════════════════
+   RATINGS
+══════════════════════════════════════════ */
+let myRating = 0;
+function setStar(n){
+  myRating = n;
+  document.querySelectorAll('.s-btn').forEach((b,i) => b.classList.toggle('on', i < n));
+}
+function submitRating(){
+  if(!myRating){ toast('⚠️ Please select a star rating first'); return; }
+  toast('⭐ Rating submitted! Thank you!');
+  setStar(0);
+  const rt = document.getElementById('rate-txt');
+  if(rt) rt.value = '';
+}
+</script>
+
+<div style="background:white;padding:20px;border-radius:16px;border:1px solid #E2E8F0">
+      <h3>📩 Contact Form</h3>
+      <input placeholder="Your Name" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #ccc">
+      <input placeholder="Your Email" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #ccc">
+      <textarea placeholder="Your Message" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #ccc;height:100px"></textarea>
+      <button style="background:#0D9488;color:white;border:none;padding:12px 18px;border-radius:10px;font-weight:bold;width:100%">
+        Send Message
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<script id="professional-validation">
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function isStrongPassword(password) {
+    return password.length >= 6;
+}
+
+function showError(message){
+    alert(message);
+}
+
+const oldSignIn = window.doSignIn || function(){};
+window.doSignIn = function(){
+    const email = document.getElementById("l-e")?.value.trim();
+    const password = document.getElementById("l-p")?.value.trim();
+
+    if(!email || !password){
+        showError("Please fill all login fields.");
+        return;
+    }
+
+    if(!isValidEmail(email)){
+        showError("Please enter a valid email address.");
+        return;
+    }
+
+    if(!isStrongPassword(password)){
+        showError("Password must be at least 6 characters.");
+        return;
+    }
+
+    alert("Login Successful ✅");
+};
+
+const oldSignUp = window.doSignUp || function(){};
+window.doSignUp = function(){
+    const first = document.getElementById("r-fn")?.value.trim();
+    const last = document.getElementById("r-ln")?.value.trim();
+    const email = document.getElementById("r-e")?.value.trim();
+    const password = document.getElementById("r-p")?.value.trim();
+
+    if(!first || !last || !email || !password){
+        showError("Please complete all registration fields.");
+        return;
+    }
+
+    if(!isValidEmail(email)){
+        showError("Please enter a valid email address.");
+        return;
+    }
+
+    if(!isStrongPassword(password)){
+        showError("Password must be at least 6 characters.");
+        return;
+    }
+
+    alert("Account Created Successfully 🎉");
+};
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    document.querySelectorAll("input").forEach(input=>{
+        input.style.transition = "0.2s";
+        input.addEventListener("focus", ()=>{
+            input.style.boxShadow = "0 0 0 4px rgba(13,148,136,.15)";
+        });
+
+        input.addEventListener("blur", ()=>{
+            input.style.boxShadow = "none";
+        });
+    });
+
+    const forms = document.querySelectorAll("form");
+    forms.forEach(f=>{
+        f.setAttribute("autocomplete","on");
+    });
+});
+</script>
+
+
+<script id="final-project-auth-system">
+
+function saveUserSession(name,email){
+    localStorage.setItem("tripnest_user", JSON.stringify({
+        name:name,
+        email:email,
+        loggedIn:true
+    }));
+}
+
+function loadUserSession(){
+    const user = JSON.parse(localStorage.getItem("tripnest_user"));
+
+    if(user && user.loggedIn){
+        if(document.getElementById("d-nm")){
+            document.getElementById("d-nm").innerText = user.name;
+        }
+
+        if(document.getElementById("d-greet")){
+            document.getElementById("d-greet").innerText =
+            "Welcome back, " + user.name + " 👋";
+        }
+
+        if(document.getElementById("d-av")){
+            document.getElementById("d-av").innerText =
+            user.name.charAt(0).toUpperCase();
+        }
+    }
+}
+
+function goDashboard(){
+    document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+    const dash = document.getElementById('dash-pg');
+    if(dash){
+        dash.classList.add('on');
+    }
+    loadUserSession();
+    window.scrollTo(0,0);
+}
+
+window.doSignUp = function(){
+
+    const first = document.getElementById("r-fn").value.trim();
+    const last = document.getElementById("r-ln").value.trim();
+    const email = document.getElementById("r-e").value.trim();
+    const password = document.getElementById("r-p").value.trim();
+
+    if(!first || !last || !email || !password){
+        alert("Please complete all registration fields.");
+        return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(!emailRegex.test(email)){
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    if(password.length < 6){
+        alert("Password must be at least 6 characters.");
+        return;
+    }
+
+    saveUserSession(first,email);
+
+    alert("Account Created Successfully 🎉");
+
+    goDashboard();
+}
+
+window.doSignIn = function(){
+
+    const email = document.getElementById("l-e").value.trim();
+    const password = document.getElementById("l-p").value.trim();
+
+    if(!email || !password){
+        alert("Please fill all login fields.");
+        return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(!emailRegex.test(email)){
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    if(password.length < 6){
+        alert("Incorrect password.");
+        return;
+    }
+
+    saveUserSession("Traveler",email);
+
+    alert("Login Successful ✅");
+
+    goDashboard();
+}
+
+window.doLogout = function(){
+    localStorage.removeItem("tripnest_user");
+
+    document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+
+    const landing = document.getElementById('landing');
+    if(landing){
+        landing.classList.add('on');
+    }
+
+    alert("Logged out successfully.");
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+    loadUserSession();
+});
+
+</script>
+
+</body>
+</html>
